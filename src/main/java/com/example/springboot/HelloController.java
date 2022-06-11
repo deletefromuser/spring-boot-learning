@@ -23,36 +23,36 @@ import lombok.extern.slf4j.Slf4j;
 public class HelloController {
 
 	@Autowired
-//	@Qualifier("stringRedisTemplate")
+	// @Qualifier("stringRedisTemplate")
 	StringRedisTemplate redis;
 
-//	@Resource
+	// @Resource
 	@Autowired
 	@Qualifier("redisTemplate")
-//	HashOperations<String, String, Product> redisHash;
+	// HashOperations<String, String, Product> redisHash;
 	RedisTemplate redisHash;
 
-//	@Autowired
-//	@Resource(name = "redisTemplate")
-//	  HashOperations<String, byte[], byte[]> hashOperations;
+	// @Autowired
+	// @Resource(name = "redisTemplate")
+	// HashOperations<String, byte[], byte[]> hashOperations;
 
 	@Autowired
 	@Resource(name = "redisTemplate")
 	HashOperations<String, String, Object> hashOperationsJson;
 
-//	@Resource(name = "redisTemplate")
-//	ClusterOperations clusterOperations;
+	// @Resource(name = "redisTemplate")
+	// ClusterOperations clusterOperations;
 
 	@Resource(name = "redisTemplate")
 	ValueOperations<String, String> valueOperations;
 
-	@GetMapping("/")
+	@GetMapping("/redis/string/set")
 	public String index() {
-//		ValueOperations<String, String>  vo = redis.opsForValue();
+		// ValueOperations<String, String> vo = redis.opsForValue();
 
 		redis.opsForValue().set("hello", "world");
 
-		return "Greetings from Spring Boot!";
+		return "hello";
 	}
 
 	@GetMapping("/getRedis")
@@ -67,13 +67,14 @@ public class HelloController {
 
 	@GetMapping("/getRedis3")
 	public String getRedis3() {
-//		redisHash.setHashKeySerializer(new StringRedisSerializer());
-//		redisHash.setHashValueSerializer(new LdapFailAwareRedisObjectSerializer());
+		// redisHash.setHashKeySerializer(new StringRedisSerializer());
+		// redisHash.setHashValueSerializer(new LdapFailAwareRedisObjectSerializer());
 
 		Product paProduct = new Product();
 		paProduct.setId("1");
 		paProduct.setName("tomcat");
-//		redisHash.opsForHash().put("product", paProduct.getId(), new ObjectHashMapper().toHash(paProduct));
+		// redisHash.opsForHash().put("product", paProduct.getId(), new
+		// ObjectHashMapper().toHash(paProduct));
 		HashOperations<String, byte[], byte[]> hashOperations = redisHash.opsForHash();
 		hashOperations.putAll("product", new ObjectHashMapper().toHash(paProduct));
 

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: head(~{this :: title}, ~{}, ~{})">
+    <title>Hello</title>
+    <link rel="stylesheet" th:href="@{/css/hello.css}" />
+</head>
+
+<body>
+    <header class="mb-3">
+    </header>
+    <div class="flex-grow-1 d-flex">Hello thymeleaf</div>
+    <footer class="text-center mt-3" th:text="${'© ' + #temporals.year(#temporals.createToday()) + ' boot'}">&copy;
+        2019 kusaka</footer>
+</body>
+
+</html>
