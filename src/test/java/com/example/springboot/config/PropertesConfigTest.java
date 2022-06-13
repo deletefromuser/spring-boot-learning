@@ -14,7 +14,7 @@ import com.example.springboot.service.IndexService;
 @SpringBootTest
 public class PropertesConfigTest {
     @Autowired
-    private PropertesConfig config;
+    private PropertiesConfig config;
 
     @Autowired(required = false)
     private IndexService service;

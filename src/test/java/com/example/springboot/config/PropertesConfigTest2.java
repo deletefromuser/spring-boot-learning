@@ -15,10 +15,10 @@ import com.example.springboot.service.IndexService;
  */
 //
 
-@SpringJUnitConfig(classes = PropertesConfig.class, initializers = ConfigDataApplicationContextInitializer.class)
+@SpringJUnitConfig(classes = PropertiesConfig.class, initializers = ConfigDataApplicationContextInitializer.class)
 public class PropertesConfigTest2 {
     @Autowired
-    private PropertesConfig config;
+    private PropertiesConfig config;
 
     @Autowired(required = false)
     private IndexService service;
