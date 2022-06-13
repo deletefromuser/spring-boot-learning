@@ -10,7 +10,8 @@ import lombok.Data;
 
 @ConfigurationProperties(prefix = "product")
 @Component
-@EnableConfigurationProperties
+// https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/using-boot-auto-configuration.html#using-boot-auto-configuration
+// @EnableConfigurationProperties
 @Data
 public class PropertesConfig {
 
