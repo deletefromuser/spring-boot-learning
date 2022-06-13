@@ -17,7 +17,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.base.Charsets;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+/**
+ * @see https://spring.io/guides/gs/testing-web/
+ * @see https://stackoverflow.com/a/51789881/19120213
+ */
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.main.lazy-initialization=true")
 @WithMockUser(username = "user")
 public class IndexControllerTest {
 

@@ -1,0 +1,10 @@
+server:
+  port: 8000
+
+product:
+  name: hello\nworld
+  desc: 'hello\nworld'
+  details: "hello\nworld"
+
+
+
