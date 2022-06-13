@@ -1,4 +1,4 @@
-package com.example.springboot;
+package com.example.springboot.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
