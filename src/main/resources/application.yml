@@ -1,5 +1,7 @@
 server:
   port: 8080
+  servlet:
+    context-path: /boot
 
 product:
   name: hello\nworld
@@ -8,22 +10,28 @@ product:
 
 spring:
   profiles:
-    active: dev
+    active: @activatedProperties@
 
 ---
 # https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/howto-properties-and-configuration.html#howto-change-configuration-depending-on-the-environment
 spring:
-  prifiles: dev
+  config:
+    activate:
+      on-profile: dev
 
 server:
+  port: 8000
   servlet:
     context-path: /boot-dev
 
 ---
 spring:
-  prifiles:  prod
+  config:
+    activate:
+      on-profile: prod
 
 server:
+  port: 8001
   servlet:
     context-path: /boot-prod
 
