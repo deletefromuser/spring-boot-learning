@@ -6,21 +6,25 @@ product:
   desc: 'hello\nworld'
   details: "hello\nworld"
 
-# spring:
-#   prifiles:
-#     active: dev
+spring:
+  profiles:
+    active: dev
+
 ---
-# spring:
-#   prifiles: dev
+# https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/howto-properties-and-configuration.html#howto-change-configuration-depending-on-the-environment
+spring:
+  prifiles: dev
 
-# server:
-#   port: 8000
+server:
+  servlet:
+    context-path: /boot-dev
 
-# ---
-# spring:
-#   prifiles:  prod
+---
+spring:
+  prifiles:  prod
 
-# server:
-#   port: 8001
+server:
+  servlet:
+    context-path: /boot-prod
 
-# ---
+---
