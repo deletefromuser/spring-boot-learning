@@ -8,13 +8,16 @@ import com.example.springboot.ProductInfo;
 
 import lombok.Data;
 
-// http://c.biancheng.net/spring_boot/config-bind.html
+/**
+ * @see http://c.biancheng.net/spring_boot/config-bind.html
+ * @see https://www.baeldung.com/spring-yaml-propertysource
+ */
 
 @Data
 @Component
 @ConfigurationProperties(prefix = "prod")
-// @PropertySource("classpath:product.properties")
-@PropertySource(value = "classpath:product.yml", factory = YamlPropertySourceFactory.class)
+// @PropertySource("classpath:product.properties") // use properties
+@PropertySource(value = "classpath:product.yml", factory = YamlPropertySourceFactory.class) // use yaml
 public class ProductConfig {
     String id;
     String name;
