@@ -82,6 +82,10 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<!-- https://www.baeldung.com/spring-profiles#1-activating-or-setting-a-profile -->
+					<profiles>
+						<profile>dev</profile>
+					</profiles>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
