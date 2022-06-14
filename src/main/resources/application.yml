@@ -41,6 +41,19 @@ server:
   servlet:
     context-path: /boot-dev
 
+# https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.logging.file-output
+logging:
+  file: 
+    path: "${user.home}/logs/"
+    # name: boot-app.log
+  pattern:
+    file: '%d{yyyy-MM-dd hh:mm:ss} [%thread] %X{requestId} %-5level %logger{50} - %msg%n'
+    # https://stackoverflow.com/a/42208638/19120213
+    # from spring-boot-XXX.RELEASE.jar/org/springframework/boot/logging/logback/defaults.xml
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %X{requestId} %clr(-%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+  level:
+    root: info
+
 ---
 spring:
   config:
