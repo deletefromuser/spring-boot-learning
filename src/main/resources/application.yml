@@ -1,10 +1,26 @@
 server:
-  port: 8000
+  port: 8080
 
 product:
   name: hello\nworld
   desc: 'hello\nworld'
   details: "hello\nworld"
 
+# spring:
+#   prifiles:
+#     active: dev
+---
+# spring:
+#   prifiles: dev
 
+# server:
+#   port: 8000
 
+# ---
+# spring:
+#   prifiles:  prod
+
+# server:
+#   port: 8001
+
+# ---
