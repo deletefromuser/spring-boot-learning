@@ -1,10 +1,7 @@
 package com.example.springboot.dao.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.example.springboot.dao.model.Users;
 
-@Mapper
 public interface UsersMapper {
     int deleteByPrimaryKey(String username);
 
