@@ -4,13 +4,13 @@ spring:
       nodes: 127.0.0.1:6481,127.0.0.1:6482,127.0.0.1:6483,127.0.0.1:6484,127.0.0.1:6485,127.0.0.1:6486
   
   datasource:
-    username: user
-    url: jdbc:mariadb://localhost:3306/ut
+    url: jdbc:mariadb://localhost:3306/ut2
     driverClassName: org.mariadb.jdbc.Driver
-    tomcat:
-      init-SQL: SET NAMES 'utf8mb4'
+    username: user
     password: '123'
-  
+    tomcat:
+      initSQL: SET NAMES 'utf8mb4'
+
   security:
     user:
       name: user
@@ -32,6 +32,16 @@ product:
   name: hello\nworld
   desc: 'hello\nworld'
   details: "hello\nworld"
+
+# https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/
+mybatis:
+  mapper-locations: classpath:com/example/springboot/dao/mapper/*.xml
+  type-aliases-package: com.example.springboot.dao.model
+  type-handlers-package: com.example.springboot.dao.mapper
+  # configuration:
+  #   map-underscore-to-camel-case: true
+  #   default-fetch-size: 100
+  #   default-statement-timeout: 30
 
 ---
 # https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/howto-properties-and-configuration.html#howto-change-configuration-depending-on-the-environment
