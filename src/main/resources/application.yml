@@ -80,4 +80,7 @@ server:
   servlet:
     context-path: /boot-prod
 
+asako:
+  id: 3
+  name: asako
 ---

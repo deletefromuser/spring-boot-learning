@@ -58,6 +58,11 @@
 			<version>5.0.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>cc.asako</groupId>
+			<artifactId>asako-spring-boot-starter</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
