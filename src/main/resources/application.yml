@@ -9,7 +9,7 @@ spring:
     username: user
     password: '123'
     tomcat:
-      initSQL: SET NAMES 'utf8mb4'
+      init-s-q-l: SET NAMES 'utf8mb4'
 
   security:
     user:
@@ -40,16 +40,34 @@ management:
       enabled: true
     health:
       enabled: true
+      # https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/html/production-ready-endpoints.html#production-ready-health
+      show-details: when-authorized
     configprops:
       enabled: true
     beans:
       enabled: true
     httptrace:
       enabled: true
-# https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2.0-M3-Release-Notes#actuator-http-trace-and-auditing-are-disabled-by-default
+  # https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2.0-M3-Release-Notes#actuator-http-trace-and-auditing-are-disabled-by-default
   trace:
     http:
       enabled: true
+
+  # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.endpoints.info.auto-configured-info-contributors
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+
+info:
+  app:
+    encoding: UTF-8
+    java:
+      source: '11'
+      target: '@java.version@'
 
 product:
   name: hello\nworld
