@@ -18,4 +18,11 @@ public class IndexController {
 
         return service.index();
     }
+
+    @GetMapping("/hello")
+    public String hello() {
+
+        return service.index();
+    }
+
 }

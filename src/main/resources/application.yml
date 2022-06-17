@@ -28,6 +28,29 @@ server:
   servlet:
     context-path: /boot
 
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: info, health, httptrace, configprops, beans
+
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    configprops:
+      enabled: true
+    beans:
+      enabled: true
+    httptrace:
+      enabled: true
+# https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2.0-M3-Release-Notes#actuator-http-trace-and-auditing-are-disabled-by-default
+  trace:
+    http:
+      enabled: true
+
 product:
   name: hello\nworld
   desc: 'hello\nworld'
