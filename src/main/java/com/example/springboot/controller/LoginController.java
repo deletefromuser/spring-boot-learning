@@ -49,6 +49,7 @@ public class LoginController {
         
         token.getAuthorities().stream().forEach(auth -> log.info(auth.toString()));
         log.info(token.getPrincipal().getAttributes().toString());
+        log.info(token.getPrincipal().getAttributes().getOrDefault("login", "null").toString());
         // authentication.getAuthorities().stream().filter(authentication ->
         // authentication).findFirst();
 
