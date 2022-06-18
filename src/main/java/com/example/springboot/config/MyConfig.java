@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.boot.actuate.audit.AuditEventRepository;
+import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -71,6 +73,12 @@ public class MyConfig implements WebMvcConfigurer {
     @Bean
     public HttpTraceRepository httpTraceRepository() {
         return new InMemoryHttpTraceRepository();
+    }
+
+    // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.auditing
+    @Bean
+    public AuditEventRepository auditEventRepository() {
+        return new InMemoryAuditEventRepository();
     }
 
 }
