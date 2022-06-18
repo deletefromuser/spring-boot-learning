@@ -11,6 +11,7 @@ import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
  */
 @Configuration
 @EnableConfigurationProperties(PropertiesConfig.class)
+@PropertySource(value = "classpath:application-oauth2.yml", factory = YamlPropertySourceFactory.class)
 public class MyConfig implements WebMvcConfigurer {
 
     /**

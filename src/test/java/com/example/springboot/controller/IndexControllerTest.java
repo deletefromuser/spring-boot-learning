@@ -1,12 +1,16 @@
 package com.example.springboot.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +21,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.base.Charsets;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @see https://spring.io/guides/gs/testing-web/
  * @see https://stackoverflow.com/a/51789881/19120213
@@ -24,9 +30,10 @@ import com.google.common.base.Charsets;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.main.lazy-initialization=true")
 @WithMockUser(username = "user")
+@Slf4j
 public class IndexControllerTest {
 
-    @LocalServerPort
+    @Value("${local.server.port}")
     private int port;
 
     @Autowired
@@ -59,4 +66,13 @@ public class IndexControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(contentType))
                 .andExpect(MockMvcResultMatchers.view().name("index"));
     }
+
+    @Test
+    public void test_user() throws Exception {
+        Authentication authenticationByManual = SecurityContextHolder.getContext().getAuthentication();
+
+        log.info(authenticationByManual.toString());
+        assertEquals("user", authenticationByManual.getName());
+    }
+
 }
