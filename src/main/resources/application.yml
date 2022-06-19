@@ -11,6 +11,12 @@ spring:
     tomcat:
       init-s-q-l: SET NAMES 'utf8mb4'
 
+  # https://stackoverflow.com/a/58299451/19120213
+  autoconfigure:
+    exclude: 
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+ 
   security:
     user:
       name: user
