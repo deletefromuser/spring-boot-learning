@@ -8,6 +8,7 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,8 @@ public class LoginController {
     }
 
     // https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
+    // /login/oauth2/code/google url must explictly setting in cloud api oauth2.0
+    // setting 承認済みのリダイレクト URI
     @PostMapping("/getgoauth")
     public String getgoauth(@RequestParam(value = "g_csrf_token", required = false) String gCsrfToken,
             @RequestParam String credential,
@@ -92,17 +95,11 @@ public class LoginController {
         log.info(new Gson().toJson(principal));
         log.info(principal.getName());
 
-        // OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
-        // // GrantedAuthority authority = token.getAuthorities().stream()
-        // // .filter(auth ->
-        // // "authority".equals(auth.getAuthority())).findFirst().orElse(null);
-
-        // token.getAuthorities().stream().forEach(auth -> log.info(auth.toString()));
-        // log.info(token.getPrincipal().getAttributes().toString());
-        // log.info(token.getPrincipal().getAttributes().getOrDefault("login",
-        // "null").toString());
-        // authentication.getAuthorities().stream().filter(authentication ->
-        // authentication).findFirst();
+        OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+        token.getAuthorities().stream().forEach(auth -> log.info(auth.toString()));
+        log.info(token.getPrincipal().getAttributes().toString());
+        log.info(token.getPrincipal().getAttributes().getOrDefault("login",
+                "null").toString());
 
         return "index";
     }
