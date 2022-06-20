@@ -26,6 +26,7 @@ spring:
         provider:
           github:
             # let authentication.getName() return github username(attributes.login) rather than id
+            # https://docs.spring.io/spring-security/reference/servlet/oauth2/login/advanced.html
             userNameAttribute: login
 
   messages:
