@@ -44,6 +44,11 @@
 
     <div class="container authenticated" sec:authorize="isAuthenticated()">
         Logged in as: <span id="user"></span>
+        <div>
+            <form method="post" th:action="@{/logout}">
+                <button type="submit" class="btn btn-primary">Logout</button>
+            </form>
+        </div>
     </div>
     <footer class="text-center mt-3" th:text="${'© ' + #temporals.year(#temporals.createToday()) + ' boot'}"></footer>
 </body>

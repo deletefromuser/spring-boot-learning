@@ -112,6 +112,9 @@ public class MyConfig implements WebMvcConfigurer {
             // .exceptionHandling(e -> e
             //     .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             // )
+            .logout(l -> l
+                .logoutSuccessUrl("/").permitAll()
+            )
             .oauth2Login();
         // @formatter:on
         return http.build();
