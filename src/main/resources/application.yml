@@ -21,6 +21,12 @@ spring:
     user:
       name: user
       password: '123'
+    oauth2:
+      client:
+        provider:
+          github:
+            # let authentication.getName() return github username(attributes.login) rather than id
+            userNameAttribute: login
 
   messages:
     # default basename: messages
@@ -124,8 +130,8 @@ logging:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %X{requestId} %clr(-%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
   level:
     root: info
-    org:
-      springframework: DEBUG
+    # org:
+    #   springframework: DEBUG
 
 ---
 spring:
