@@ -9,13 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.springboot.dao.model.Users;
+import com.example.springboot.dao.model.User;
 
 @SpringBootTest
 public class UsersMapperTest {
 
     @Autowired
-    UsersMapper mapper;
+    UserMapper mapper;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -29,7 +29,7 @@ public class UsersMapperTest {
     @Transactional
     void testInsert() {
         EasyRandom easyRandom = new EasyRandom();
-        Users person = easyRandom.nextObject(Users.class);
+        User person = easyRandom.nextObject(User.class);
 
         int count = jdbcTemplate.queryForObject("SELECT count(*) from `users`", Integer.class);
         assertEquals(0, count);
