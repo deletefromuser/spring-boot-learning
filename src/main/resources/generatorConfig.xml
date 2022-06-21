@@ -34,8 +34,9 @@
 			<!-- <property name="enableSubPackages" value="true" /> -->
 		</javaClientGenerator>
 
-		<!-- catalog="ut2" -->
 		<table tableName="users" catalog="ut2" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" selectByExampleQueryId="false">
+			<!-- http://mybatis.org/generator/configreference/table.html#supported-properties -->
+			<property name="ignoreQualifiersAtRuntime" value="true" />
 			<columnOverride column="enabled" javaType="java.lang.Boolean" />
 		</table>
 
