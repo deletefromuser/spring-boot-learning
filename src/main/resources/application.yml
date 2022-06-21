@@ -133,6 +133,11 @@ logging:
     root: info
     # org:
     #   springframework: DEBUG
+    com:
+      example:
+        springboot:
+          dao:
+            mapper: debug
 
 ---
 spring:
