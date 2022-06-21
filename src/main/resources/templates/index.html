@@ -11,6 +11,20 @@
             $("#user").html(data.name);
         });
     </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // https://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#script-inlining-javascript-and-dart
+
+        let error = /*[[@{/error}]]*/ '';
+        $.get(error, function (data) {
+            if (data) {
+                $(".error").html(data);
+            } else {
+                $(".error").html('');
+            }
+        });
+        /*]]>*/
+    </script>
 </head>
 
 <body class="m-5">
@@ -50,6 +64,9 @@
             </form>
         </div>
     </div>
+
+    <div class="container text-danger error"></div>
+
     <footer class="text-center mt-3" th:text="${'© ' + #temporals.year(#temporals.createToday()) + ' boot'}"></footer>
 </body>
 

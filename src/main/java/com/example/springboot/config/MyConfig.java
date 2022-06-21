@@ -1,11 +1,11 @@
 package com.example.springboot.config;
 
-import java.util.HashSet;
+import java.io.IOException;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
@@ -15,21 +15,17 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
-
-import com.google.gson.Gson;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -104,18 +100,35 @@ public class MyConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
+        SimpleUrlAuthenticationFailureHandler handler = new SimpleUrlAuthenticationFailureHandler("/");
+
         http
             .authorizeRequests(a -> a
                 .antMatchers("/", "/error", "/webjars/**", "/css/**", "/js/**", "/login").permitAll()
                 .anyRequest().authenticated()
             )
-            // .exceptionHandling(e -> e
-            //     .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-            // )
+            .exceptionHandling(e -> e
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+            )
             .logout(l -> l
                 .logoutSuccessUrl("/").permitAll()
             )
-            .oauth2Login();
+            .oauth2Login(o -> o
+            .failureHandler(
+                // anonymous class
+                new SimpleUrlAuthenticationFailureHandler("/") {
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException ,ServletException {
+                        request.getSession().setAttribute("error.message", exception.getMessage());
+                        super.onAuthenticationFailure(request, response, exception);
+                    };
+                })
+            // lambda expression
+            // (request, response, exception) -> {
+			//     request.getSession().setAttribute("error.message", exception.getMessage());
+			//     handler.onAuthenticationFailure(request, response, exception);
+            // })
+            );
         // @formatter:on
         return http.build();
     }
@@ -123,38 +136,38 @@ public class MyConfig implements WebMvcConfigurer {
     // // https://stackoverflow.com/a/63876210/19120213
     // @Bean
     // public GrantedAuthoritiesMapper userAuthoritiesMapper() {
-    //     return (authorities) -> {
-    //         Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+    // return (authorities) -> {
+    // Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
-    //         authorities.forEach(authority -> {
-    //             if (authority instanceof OidcUserAuthority) {
-    //                 OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+    // authorities.forEach(authority -> {
+    // if (authority instanceof OidcUserAuthority) {
+    // OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
 
-    //                 OidcIdToken idToken = oidcUserAuthority.getIdToken();
-    //                 OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
+    // OidcIdToken idToken = oidcUserAuthority.getIdToken();
+    // OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
 
-    //                 // Map the claims found in idToken and/or userInfo
-    //                 // to one or more GrantedAuthority's and add it to mappedAuthorities
-    //                 mappedAuthorities.add(oidcUserAuthority);
-    //             } else if (authority instanceof OAuth2UserAuthority) {
-    //                 OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority) authority;
+    // // Map the claims found in idToken and/or userInfo
+    // // to one or more GrantedAuthority's and add it to mappedAuthorities
+    // mappedAuthorities.add(oidcUserAuthority);
+    // } else if (authority instanceof OAuth2UserAuthority) {
+    // OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority) authority;
 
-    //                 Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();
-    //                 // userAttributes.put("name", authority.)
-    //                 log.info(userAttributes.toString());
-    //                 log.info(new Gson().toJson(userAttributes));
+    // Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();
+    // // userAttributes.put("name", authority.)
+    // log.info(userAttributes.toString());
+    // log.info(new Gson().toJson(userAttributes));
 
-    //                 // Map the attributes found in userAttributes
-    //                 // to one or more GrantedAuthority's and add it to mappedAuthorities
-    //                 mappedAuthorities.add(oauth2UserAuthority);
-    //             }
-    //         });
+    // // Map the attributes found in userAttributes
+    // // to one or more GrantedAuthority's and add it to mappedAuthorities
+    // mappedAuthorities.add(oauth2UserAuthority);
+    // }
+    // });
 
-    //         log.info(mappedAuthorities.toString());
-    //         log.info(new Gson().toJson(mappedAuthorities));
+    // log.info(mappedAuthorities.toString());
+    // log.info(new Gson().toJson(mappedAuthorities));
 
-    //         return mappedAuthorities;
-    //     };
+    // return mappedAuthorities;
+    // };
     // }
 
 }
