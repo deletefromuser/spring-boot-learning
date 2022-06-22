@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
@@ -213,10 +216,17 @@ public class MyConfig implements WebMvcConfigurer {
                         .andOauthIdEqualTo(user.getAttribute("id").toString());
                 List<User> userInfo = userMapper.selectByExample(searchFilter);
                 if (userInfo.isEmpty()) {
-                    // TODO handle username duplicate case
-                    User newUser = new User(user.getAttribute("login"), "", true, "github",
-                            user.getAttribute("id").toString());
-                    userMapper.insert(newUser);
+                    if (userMapper.selectByPrimaryKey(user.getAttribute("login").toString()) == null) {
+                        User newUser = new User(user.getAttribute("login"), "", true, "github",
+                                user.getAttribute("id").toString());
+                        userMapper.insert(newUser);
+                    } else {
+                        User newUser = new User(
+                                user.getAttribute("login") + "_" + RandomStringUtils.randomAlphanumeric(6),
+                                "", true,
+                                "github", user.getAttribute("id").toString());
+                        userMapper.insert(newUser);
+                    }
                 } else {
                     // do nothing
                 }
