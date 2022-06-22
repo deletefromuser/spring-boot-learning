@@ -34,6 +34,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.LocaleResolver;
@@ -198,47 +199,74 @@ public class MyConfig implements WebMvcConfigurer {
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(WebClient rest, UserMapper userMapper) {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
-        return request -> {
-            OAuth2User user = delegate.loadUser(request);
-            if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
+        return new OAuth2UserService<OAuth2UserRequest, OAuth2User>() {
+            @Override
+            @Transactional
+            public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
+                OAuth2User user = delegate.loadUser(request);
+                if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
+                    return user;
+                }
+
+                UserExample searchFilter = new UserExample();
+                searchFilter.createCriteria().andProviderEqualTo("github")
+                        .andOauthIdEqualTo(user.getAttribute("id").toString());
+                List<User> userInfo = userMapper.selectByExample(searchFilter);
+                if (userInfo.isEmpty()) {
+                    // TODO handle username duplicate case
+                    User newUser = new User(user.getAttribute("login"), "", true, "github",
+                            user.getAttribute("id").toString());
+                    userMapper.insert(newUser);
+                } else {
+                    // do nothing
+                }
+
                 return user;
             }
-
-            UserExample searchFilter = new UserExample();
-            searchFilter.createCriteria().andProviderEqualTo("github")
-                    .andOauthIdEqualTo(user.getAttribute("id").toString());
-            List<User> userInfo = userMapper.selectByExample(searchFilter);
-            if (userInfo.isEmpty()) {
-                // TODO handle username duplicate case and lack of transaction
-                User newUser = new User(user.getAttribute("login"), "", true, "github",
-                        user.getAttribute("id").toString());
-                userMapper.insert(newUser);
-            } else {
-                // do nothing
-            }
-
-            return user;
-
-            // OAuth2AuthorizedClient client = new
-            // OAuth2AuthorizedClient(request.getClientRegistration(), user.getName(),
-            // request.getAccessToken());
-            // String url = user.getAttribute("organizations_url");
-
-            // List<Map<String, Object>> orgs = rest
-            // .get().uri(url)
-            // .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient(client))
-            // .retrieve()
-            // .bodyToMono(List.class)
-            // .block();
-
-            // if (orgs.stream().anyMatch(org ->
-            // "spring-projects".equals(org.get("login")))) {
-            // return user;
-            // }
-
-            // throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not
-            // in Spring Team", ""));
         };
+        // return request -> {
+        // OAuth2User user = delegate.loadUser(request);
+        // if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
+        // return user;
+        // }
+
+        // UserExample searchFilter = new UserExample();
+        // searchFilter.createCriteria().andProviderEqualTo("github")
+        // .andOauthIdEqualTo(user.getAttribute("id").toString());
+        // List<User> userInfo = userMapper.selectByExample(searchFilter);
+        // if (userInfo.isEmpty()) {
+        // // TODO handle username duplicate case and lack of transaction
+        // User newUser = new User(user.getAttribute("login"), "", true, "github",
+        // user.getAttribute("id").toString());
+        // userMapper.insert(newUser);
+        // } else {
+        // // do nothing
+        // }
+
+        // return user;
+
+        // // OAuth2AuthorizedClient client = new
+        // // OAuth2AuthorizedClient(request.getClientRegistration(), user.getName(),
+        // // request.getAccessToken());
+        // // String url = user.getAttribute("organizations_url");
+
+        // // List<Map<String, Object>> orgs = rest
+        // // .get().uri(url)
+        // //
+        // .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient(client))
+        // // .retrieve()
+        // // .bodyToMono(List.class)
+        // // .block();
+
+        // // if (orgs.stream().anyMatch(org ->
+        // // "spring-projects".equals(org.get("login")))) {
+        // // return user;
+        // // }
+
+        // // throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token",
+        // "Not
+        // // in Spring Team", ""));
+        // };
     }
 
 }
