@@ -1,11 +1,10 @@
 package com.example.springboot.config;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +20,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -32,7 +31,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -47,6 +45,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import com.example.springboot.dao.mapper.UserMapper;
 import com.example.springboot.dao.model.User;
 import com.example.springboot.dao.model.UserExample;
+import com.example.springboot.model.Todo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -278,5 +277,18 @@ public class MyConfig implements WebMvcConfigurer {
         // // in Spring Team", ""));
         // };
     }
+
+    // Spring实战（第5版）8.1.2 使⽤JmsTemplate发送消息
+    // @Bean
+    // public MappingJackson2MessageConverter messageConverter() {
+    //     MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
+    //     messageConverter.setTypeIdPropertyName("_typeId");
+
+    //     Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
+    //     typeIdMappings.put("todo", Todo.class);
+    //     messageConverter.setTypeIdMappings(typeIdMappings);
+
+    //     return messageConverter;
+    // }
 
 }

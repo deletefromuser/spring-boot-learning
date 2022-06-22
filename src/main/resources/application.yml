@@ -29,6 +29,15 @@ spring:
             # https://docs.spring.io/spring-security/reference/servlet/oauth2/login/advanced.html
             userNameAttribute: login
 
+  #artemis:
+  #  broker-url: artemis.tacocloud.com:61617
+  #  user: tacoweb
+  #  password: l3tm31n
+
+  jms:
+    template:
+      default-destination: tacocloud.order.queue
+
   messages:
     # default basename: messages
     basename: i18n.messages
