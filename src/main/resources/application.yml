@@ -29,15 +29,24 @@ spring:
             # https://docs.spring.io/spring-security/reference/servlet/oauth2/login/advanced.html
             userNameAttribute: login
 
-  artemis:
-    mode: native
-    broker-url: "tcp://localhost:61616"
-    user: "admin"
-    password: "admin"
+  # artemis:
+  #   mode: native
+  #   broker-url: "tcp://localhost:61616"
+  #   user: "admin"
+  #   password: "admin"
 
-  jms:
+  # jms:
+  #   template:
+  #     default-destination: tacocloud.order.queue
+
+  rabbitmq:
+    # host: "localhost"
+    # port: 5672
+    # username: "admin"
+    # password: "secret"
     template:
-      default-destination: tacocloud.order.queue
+      exchange: example.boot.todos
+      routing-key: handler.todo
 
   messages:
     # default basename: messages
@@ -144,6 +153,7 @@ logging:
     # org:
     #   springframework: DEBUG
     com.example.springboot.dao.mapper: debug
+    org.springframework.amqp.rabbit: debug
 
 ---
 spring:

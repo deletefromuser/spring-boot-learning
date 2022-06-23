@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
@@ -277,24 +283,54 @@ public class MyConfig implements WebMvcConfigurer {
     // Spring实战（第5版）8.1.2 使⽤JmsTemplate发送消息
     // @Bean
     // public MappingJackson2MessageConverter messageConverter() {
-    //     MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
-    //     messageConverter.setTypeIdPropertyName("_typeId");
+    // MappingJackson2MessageConverter messageConverter = new
+    // MappingJackson2MessageConverter();
+    // messageConverter.setTypeIdPropertyName("_typeId");
 
-    //     Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
-    //     typeIdMappings.put("todo", Todo.class);
-    //     messageConverter.setTypeIdMappings(typeIdMappings);
+    // Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
+    // typeIdMappings.put("todo", Todo.class);
+    // messageConverter.setTypeIdMappings(typeIdMappings);
 
-    //     return messageConverter;
+    // return messageConverter;
     // }
 
-    // // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.jms.receiving
+    // //
+    // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.jms.receiving
     // @Bean
-    // public JmsListenerContainerFactory<DefaultMessageListenerContainer> jmsListenerContainerFactory(
-    //         DefaultJmsListenerContainerFactoryConfigurer configurer, ConnectionFactory connectionFactory) {
-    //     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-    //     factory.setMessageConverter(messageConverter());
-    //     configurer.configure(factory, connectionFactory);
-    //     return factory;
+    // public JmsListenerContainerFactory<DefaultMessageListenerContainer>
+    // jmsListenerContainerFactory(
+    // DefaultJmsListenerContainerFactoryConfigurer configurer, ConnectionFactory
+    // connectionFactory) {
+    // DefaultJmsListenerContainerFactory factory = new
+    // DefaultJmsListenerContainerFactory();
+    // factory.setMessageConverter(messageConverter());
+    // configurer.configure(factory, connectionFactory);
+    // return factory;
     // }
+
+    // https://spring.io/guides/gs/messaging-rabbitmq/
+    static final String topicExchangeName = "example.boot.todos";
+
+    static final String queueName = "spring-boot";
+
+    @Bean
+    Queue queue() {
+        return new Queue(queueName, false);
+    }
+
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange(topicExchangeName);
+    }
+
+    @Bean
+    Binding binding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("handler.#");
+    }
+
+    @Bean
+    public MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
 
 }

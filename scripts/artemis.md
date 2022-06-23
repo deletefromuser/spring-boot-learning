@@ -33,3 +33,8 @@ You can now start the broker by executing:
 Or you can run the broker in the background using:
 
    "/var/lib/mybroker/bin/artemis-service" start
+
+------------------------------------------------------
+
+# start RabblitMQ ##
+`systemctl start rabbitmq-server`
