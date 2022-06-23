@@ -1,12 +1,9 @@
 package com.example.springboot.config;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import javax.jms.ConnectionFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,16 +13,11 @@ import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
-import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
-import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerContainerFactory;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
@@ -50,7 +42,6 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import com.example.springboot.dao.mapper.UserMapper;
 import com.example.springboot.dao.model.User;
 import com.example.springboot.dao.model.UserExample;
-import com.example.springboot.model.Todo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -284,26 +275,26 @@ public class MyConfig implements WebMvcConfigurer {
     }
 
     // Spring实战（第5版）8.1.2 使⽤JmsTemplate发送消息
-    @Bean
-    public MappingJackson2MessageConverter messageConverter() {
-        MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
-        messageConverter.setTypeIdPropertyName("_typeId");
+    // @Bean
+    // public MappingJackson2MessageConverter messageConverter() {
+    //     MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
+    //     messageConverter.setTypeIdPropertyName("_typeId");
 
-        Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
-        typeIdMappings.put("todo", Todo.class);
-        messageConverter.setTypeIdMappings(typeIdMappings);
+    //     Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
+    //     typeIdMappings.put("todo", Todo.class);
+    //     messageConverter.setTypeIdMappings(typeIdMappings);
 
-        return messageConverter;
-    }
+    //     return messageConverter;
+    // }
 
-    // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.jms.receiving
-    @Bean
-    public JmsListenerContainerFactory<DefaultMessageListenerContainer> jmsListenerContainerFactory(
-            DefaultJmsListenerContainerFactoryConfigurer configurer, ConnectionFactory connectionFactory) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setMessageConverter(messageConverter());
-        configurer.configure(factory, connectionFactory);
-        return factory;
-    }
+    // // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.jms.receiving
+    // @Bean
+    // public JmsListenerContainerFactory<DefaultMessageListenerContainer> jmsListenerContainerFactory(
+    //         DefaultJmsListenerContainerFactoryConfigurer configurer, ConnectionFactory connectionFactory) {
+    //     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+    //     factory.setMessageConverter(messageConverter());
+    //     configurer.configure(factory, connectionFactory);
+    //     return factory;
+    // }
 
 }
