@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Todo implements Serializable {
+    private String _typeId;
     private int userId;
     private int id;
     private String title;

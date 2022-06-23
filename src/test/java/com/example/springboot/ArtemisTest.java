@@ -25,15 +25,18 @@ public class ArtemisTest {
     private JmsTemplate jms;
 
     // @Autowired
-    // private MessageConverter converter;
+    // private MappingJackson2MessageConverter converter;
 
     @Test
     public void testSendTodo() throws MessageConversionException, JMSException {
         EasyRandom easyRandom = new EasyRandom();
         Todo todo = easyRandom.nextObject(Todo.class);
+        todo.set_typeId("todo");
         jms.send(session -> {
             Message msg = session.createObjectMessage(todo);
+            // converter.setTypeIdPropertyName(typeIdPropertyName);
             // msg.setStringProperty("_typeId", "todo");
+            log.info(msg.toString());
             return msg;
         });
 

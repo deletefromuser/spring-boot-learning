@@ -279,16 +279,16 @@ public class MyConfig implements WebMvcConfigurer {
     }
 
     // Spring实战（第5版）8.1.2 使⽤JmsTemplate发送消息
-    // @Bean
-    // public MappingJackson2MessageConverter messageConverter() {
-    //     MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
-    //     messageConverter.setTypeIdPropertyName("_typeId");
+    @Bean
+    public MappingJackson2MessageConverter messageConverter() {
+        MappingJackson2MessageConverter messageConverter = new MappingJackson2MessageConverter();
+        messageConverter.setTypeIdPropertyName("_typeId");
 
-    //     Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
-    //     typeIdMappings.put("todo", Todo.class);
-    //     messageConverter.setTypeIdMappings(typeIdMappings);
+        Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
+        typeIdMappings.put("todo", Todo.class);
+        messageConverter.setTypeIdMappings(typeIdMappings);
 
-    //     return messageConverter;
-    // }
+        return messageConverter;
+    }
 
 }
