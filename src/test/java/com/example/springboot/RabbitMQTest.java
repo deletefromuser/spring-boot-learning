@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RabbitMQTest {
 
     @Autowired
-    private RabbitTemplate jms;
+    private RabbitTemplate rabbit;
 
     @Test
     public void testSendTodo() {
@@ -29,21 +29,21 @@ public class RabbitMQTest {
         Todo todo = easyRandom.nextObject(Todo.class);
         MessageProperties props = new MessageProperties();
         props.setHeader("REFER_TYPE", "WEB");
-        Message msg = jms.getMessageConverter().toMessage(todo, props);
+        Message msg = rabbit.getMessageConverter().toMessage(todo, props);
         log.info(msg.toString());
-        jms.send(msg);
+        rabbit.send(msg);
 
         todo = easyRandom.nextObject(Todo.class);
-        jms.convertAndSend(todo);
+        rabbit.convertAndSend(todo);
 
-        Message result = jms.receive("spring-boot");
+        Message result = rabbit.receive("spring-boot");
         assertNotNull(result);
-        assertNotNull(jms.getMessageConverter().fromMessage(result));
+        assertNotNull(rabbit.getMessageConverter().fromMessage(result));
 
-        Todo resultTodo = (Todo) jms.receiveAndConvert("spring-boot");
+        Todo resultTodo = (Todo) rabbit.receiveAndConvert("spring-boot");
         assertNotNull(resultTodo);
 
-        log.info(jms.getMessageConverter().fromMessage(result).toString());
+        log.info(rabbit.getMessageConverter().fromMessage(result).toString());
         log.info(resultTodo.toString());
     }
 
@@ -53,49 +53,29 @@ public class RabbitMQTest {
         Todo todo = easyRandom.nextObject(Todo.class);
         MessageProperties props = new MessageProperties();
         props.setHeader("REFER_TYPE", "WEB");
-        Message msg = jms.getMessageConverter().toMessage(todo, props);
+        Message msg = rabbit.getMessageConverter().toMessage(todo, props);
         log.info(msg.toString());
-        jms.send("direct.todos", "handler.todo", msg);
+        rabbit.send("direct.todos", "handler.todo", msg);
 
         todo = easyRandom.nextObject(Todo.class);
-        jms.convertAndSend("direct.todos", "handler.todo", todo);
+        rabbit.convertAndSend("direct.todos", "handler.todo", todo);
 
-        Message result = jms.receive("spring-boot-direct");
+        Message result = rabbit.receive("spring-boot-direct");
         assertNotNull(result);
-        assertNotNull(jms.getMessageConverter().fromMessage(result));
+        assertNotNull(rabbit.getMessageConverter().fromMessage(result));
 
-        Todo resultTodo = (Todo) jms.receiveAndConvert("spring-boot-direct");
+        Todo resultTodo = (Todo) rabbit.receiveAndConvert("spring-boot-direct");
         assertNotNull(resultTodo);
 
-        log.info(jms.getMessageConverter().fromMessage(result).toString());
+        log.info(rabbit.getMessageConverter().fromMessage(result).toString());
         log.info(resultTodo.toString());
     }
 
-    // @Test
-    // public void testSendTodoByConverter() throws MessageConversionException,
-    // JMSException {
-    // EasyRandom easyRandom = new EasyRandom();
-    // Todo todo = easyRandom.nextObject(Todo.class);
-    // jms.convertAndSend(todo, msg -> {
-    // msg.setStringProperty("_typeId", "todo");
-    // return msg;
-    // });
-
-    // Todo result = (Todo) jms.receiveAndConvert();
-    // log.info(result.toString());
-    // assertNotNull(result);
-    // assertNotNull(result.getTitle());
-    // }
-
-    // @Test
-    // public void testSendTodoForListener() throws MessageConversionException,
-    // JMSException {
-    // EasyRandom easyRandom = new EasyRandom();
-    // Todo todo = easyRandom.nextObject(Todo.class);
-    // jms.convertAndSend(todo, msg -> {
-    // msg.setStringProperty("_typeId", "todo");
-    // return msg;
-    // });
-    // }
+    @Test
+    public void testSendTodoForListener() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend(todo);
+    }
 
 }
