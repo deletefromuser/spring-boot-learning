@@ -48,6 +48,12 @@ spring:
       exchange: example.boot.todos
       routing-key: handler.todo
 
+  #kafka:
+  #  bootstrap-servers:
+  #    - kafka.tacocloud.com:909
+  #    - kafka.tacocloud.com:9093
+  #    - kafka.tacocloud.com:909
+
   messages:
     # default basename: messages
     basename: i18n.messages

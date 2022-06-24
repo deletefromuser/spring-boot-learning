@@ -1,6 +1,5 @@
 package com.example.springboot.listener;
 
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import com.example.springboot.model.Todo;
@@ -12,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TodoListener {
 
     // @JmsListener(destination = "tacocloud.order.queue")
-    @RabbitListener(queues = "spring-boot")
+    // @RabbitListener(queues = "spring-boot")
     public void receiveOrder(Todo todo) {
         log.info(todo.toString());
     }
