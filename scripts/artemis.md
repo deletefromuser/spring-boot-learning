@@ -38,3 +38,7 @@ Or you can run the broker in the background using:
 
 # start RabblitMQ ##
 `systemctl start rabbitmq-server`
+
+[How to enable RabbitMQ management interface](https://www.codementor.io/@bosunbolawa/how-to-enable-rabbitmq-management-interface-owc5lzg7f)
+
+`rabbitmq-plugins enable rabbitmq_management`

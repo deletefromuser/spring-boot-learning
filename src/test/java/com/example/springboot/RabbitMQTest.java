@@ -23,6 +23,10 @@ public class RabbitMQTest {
     @Autowired
     private RabbitTemplate rabbit;
 
+    // TODO wait for spring-amqp 3.0.0-M4
+    // @Autowired
+    // private RabbitStreamTemplate rabbitStream;
+
     @Test
     public void testSendTodo() {
         EasyRandom easyRandom = new EasyRandom();
