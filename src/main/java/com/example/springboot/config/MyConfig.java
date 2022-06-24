@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Declarables;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -310,8 +312,10 @@ public class MyConfig implements WebMvcConfigurer {
 
     // https://spring.io/guides/gs/messaging-rabbitmq/
     static final String topicExchangeName = "example.boot.todos";
+    static final String directExchangeName = "direct.todos";
 
     static final String queueName = "spring-boot";
+    static final String queueNameDirect = "spring-boot-direct";
 
     @Bean
     Queue queue() {
@@ -319,13 +323,31 @@ public class MyConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    Queue queueDirect() {
+        return new Queue(queueNameDirect, false);
+    }
+
+    @Bean
+    // @Profile("dev")
     TopicExchange exchange() {
         return new TopicExchange(topicExchangeName);
     }
 
     @Bean
+    // @Profile("prod")
+    DirectExchange exchangeDirect() {
+        return new DirectExchange(directExchangeName);
+    }
+
+    @Bean
     Binding binding(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("handler.#");
+    }
+
+    // https://stackoverflow.com/a/41210909/19120213
+    @Bean
+    Binding bindingDirect(Queue queue, DirectExchange directExchange) {
+        return BindingBuilder.bind(queueDirect()).to(directExchange).with("handler.todo");
     }
 
     @Bean

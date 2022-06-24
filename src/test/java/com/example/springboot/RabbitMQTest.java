@@ -47,6 +47,30 @@ public class RabbitMQTest {
         log.info(resultTodo.toString());
     }
 
+    @Test
+    public void testSendTodoByDirectExchange() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        MessageProperties props = new MessageProperties();
+        props.setHeader("REFER_TYPE", "WEB");
+        Message msg = jms.getMessageConverter().toMessage(todo, props);
+        log.info(msg.toString());
+        jms.send("direct.todos", "handler.todo", msg);
+
+        todo = easyRandom.nextObject(Todo.class);
+        jms.convertAndSend("direct.todos", "handler.todo", todo);
+
+        Message result = jms.receive("spring-boot-direct");
+        assertNotNull(result);
+        assertNotNull(jms.getMessageConverter().fromMessage(result));
+
+        Todo resultTodo = (Todo) jms.receiveAndConvert("spring-boot-direct");
+        assertNotNull(resultTodo);
+
+        log.info(jms.getMessageConverter().fromMessage(result).toString());
+        log.info(resultTodo.toString());
+    }
+
     // @Test
     // public void testSendTodoByConverter() throws MessageConversionException,
     // JMSException {
