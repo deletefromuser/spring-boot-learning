@@ -18,6 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
@@ -52,6 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableConfigurationProperties(PropertiesConfig.class)
 @PropertySource(value = "classpath:application-oauth2.yml", factory = YamlPropertySourceFactory.class)
 @Slf4j
+@EnableKafka
 public class MyConfig implements WebMvcConfigurer {
 
     /**
@@ -311,40 +315,49 @@ public class MyConfig implements WebMvcConfigurer {
 
     // @Bean
     // Queue queue() {
-    //     return new Queue(queueName, false);
+    // return new Queue(queueName, false);
     // }
 
     // @Bean
     // Queue queueDirect() {
-    //     return new Queue(queueNameDirect, false);
+    // return new Queue(queueNameDirect, false);
     // }
 
     // @Bean
     // // @Profile("dev")
     // TopicExchange exchange() {
-    //     return new TopicExchange(topicExchangeName);
+    // return new TopicExchange(topicExchangeName);
     // }
 
     // @Bean
     // // @Profile("prod")
     // DirectExchange exchangeDirect() {
-    //     return new DirectExchange(directExchangeName);
+    // return new DirectExchange(directExchangeName);
     // }
 
     // @Bean
     // Binding binding(Queue queue, TopicExchange exchange) {
-    //     return BindingBuilder.bind(queue).to(exchange).with("handler.#");
+    // return BindingBuilder.bind(queue).to(exchange).with("handler.#");
     // }
 
     // // https://stackoverflow.com/a/41210909/19120213
     // @Bean
     // Binding bindingDirect(Queue queue, DirectExchange directExchange) {
-    //     return BindingBuilder.bind(queueDirect()).to(directExchange).with("handler.todo");
+    // return
+    // BindingBuilder.bind(queueDirect()).to(directExchange).with("handler.todo");
     // }
 
     // @Bean
     // public MessageConverter messageConverter() {
-    //     return new Jackson2JsonMessageConverter();
+    // return new Jackson2JsonMessageConverter();
+    // }
+
+    // @Bean
+    // public ConcurrentKafkaListenerContainerFactory myKafkaListenerContainerFactory(ConsumerFactory<?, ?> consumerFactory) {
+    //     ConcurrentKafkaListenerContainerFactory factory = new ConcurrentKafkaListenerContainerFactory();
+    //     factory.setConsumerFactory(consumerFactory);
+    //     factory.setConcurrency(4);
+    //     return factory;
     // }
 
 }

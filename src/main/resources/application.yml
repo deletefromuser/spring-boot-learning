@@ -48,11 +48,20 @@ spring:
       exchange: example.boot.todos
       routing-key: handler.todo
 
-  #kafka:
+  kafka:
   #  bootstrap-servers:
   #    - kafka.tacocloud.com:909
   #    - kafka.tacocloud.com:9093
   #    - kafka.tacocloud.com:909
+    template:
+      default-topic: topic.todo
+    producer:
+      properties:
+        "[value.serializer]": org.apache.kafka.common.serialization.ByteArraySerializer
+    consumer:
+      properties:
+        "[value.deserializer]": org.apache.kafka.common.serialization.ByteArrayDeserializer
+        # "[groud-id]": "test"
 
   messages:
     # default basename: messages
