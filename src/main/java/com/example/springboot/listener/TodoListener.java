@@ -1,5 +1,7 @@
 package com.example.springboot.listener;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,9 +17,24 @@ public class TodoListener {
     // @JmsListener(destination = "tacocloud.order.queue")
     // @RabbitListener(queues = "spring-boot")
     @KafkaListener(topics = "topic.todo", groupId = "test")
-    public void receiveOrder(byte[] todoBytes, ConsumerRecord<String, byte[]> consumerRecord) {
-        log.info(SerializationUtils.deserialize(todoBytes).toString());
-        log.info(consumerRecord.key());
+    public void receiveOrder1(byte[] todoBytes, ConsumerRecord<String, byte[]> consumerRecord) {
+        log.info("consumer 1: " + SerializationUtils.deserialize(todoBytes).toString());
+        log.info("consumer 1: " + consumerRecord.headers().toString());
+        log.info("consumer 1: " + SerializationUtils.deserialize(consumerRecord.value()).toString());
+    }
+
+    @KafkaListener(topics = "topic.todo", groupId = "test")
+    public void receiveOrder2(byte[] todoBytes, ConsumerRecord<String, byte[]> consumerRecord) {
+        log.info("consumer 2: " + SerializationUtils.deserialize(todoBytes).toString());
+        log.info("consumer 2: " + consumerRecord.headers().toString());
+        log.info("consumer 2: " + SerializationUtils.deserialize(consumerRecord.value()).toString());
+    }
+
+    @KafkaListener(topics = "topic.todo", groupId = "test2")
+    public void receiveOrderForBroadcast(byte[] todoBytes, ConsumerRecord<String, byte[]> consumerRecord) {
+        log.info("broadcast: " + SerializationUtils.deserialize(todoBytes).toString());
+        log.info("broadcast: " + consumerRecord.headers().toString());
+        log.info("broadcast: " + SerializationUtils.deserialize(consumerRecord.value()).toString());
     }
 
 }
