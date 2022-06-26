@@ -23,6 +23,9 @@ public class KafkaTest {
     @Autowired
     private KafkaTemplate<String, byte[]> kafkaObject;
 
+    @Autowired
+    private KafkaTemplate<String, Todo> kafkaJson;
+
     // https://stackoverflow.com/a/37056589/19120213
     @Test
     public void testSendTodo() {
@@ -30,7 +33,8 @@ public class KafkaTest {
         Todo todo = easyRandom.nextObject(Todo.class);
         // kafka.send("topic.todo", "hello kafka");
 
-        kafkaObject.sendDefault(SerializationUtils.serialize(todo));
+        // kafkaObject.sendDefault(SerializationUtils.serialize(todo));
+        kafkaJson.send("topic.todo.json", todo);
     }
 
 }

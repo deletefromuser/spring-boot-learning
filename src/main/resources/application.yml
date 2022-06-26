@@ -57,11 +57,14 @@ spring:
       default-topic: topic.todo
     producer:
       properties:
-        "[value.serializer]": org.apache.kafka.common.serialization.ByteArraySerializer
+        "[value.serializer]": org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       properties:
-        "[value.deserializer]": org.apache.kafka.common.serialization.ByteArrayDeserializer
+        "[value.deserializer]": org.springframework.kafka.support.serializer.JsonDeserializer
         # "[groud-id]": "test"
+        # https://stackoverflow.com/a/61963869/19120213
+        # "[spring.json.trusted.packages]": "java.util, java.lang, com.example.springboot.model.Todo"
+        "[spring.json.trusted.packages]": "*"
 
   messages:
     # default basename: messages
