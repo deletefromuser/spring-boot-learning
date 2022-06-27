@@ -43,6 +43,11 @@ public class KafkaTest {
             log.info(result.getProducerRecord().toString());
             log.info(result.getRecordMetadata().toString());
         }, ex -> log.error("send error", ex));
+
+        todo = easyRandom.nextObject(Todo.class);
+        todo.setTitle(RandomStringUtils.randomAlphanumeric(20));
+
+        kafkaJson.send("topic.todo.json", todo);
     }
 
 }

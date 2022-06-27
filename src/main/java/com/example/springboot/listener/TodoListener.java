@@ -39,11 +39,11 @@ public class TodoListener {
     //     log.info("broadcast: " + SerializationUtils.deserialize(consumerRecord.value()).toString());
     // }
 
-    @KafkaListener(topics = "topic.todo.json", groupId = "test")
-    public void receiveOrder1(Todo todo, ConsumerRecord<String, Todo> consumerRecord) {
-        log.info("consumer 1: " + todo.toString());
-        log.info("consumer 1: " + consumerRecord.headers().toString());
-        log.info("consumer 1: " + consumerRecord.value().toString());
-    }
+    // @KafkaListener(topics = "topic.todo.json", groupId = "test")
+    // public void receiveOrder1(Todo todo, ConsumerRecord<String, Todo> consumerRecord) {
+    //     log.info("consumer 1: " + todo.toString());
+    //     log.info("consumer 1: " + consumerRecord.headers().toString());
+    //     log.info("consumer 1: " + consumerRecord.value().toString());
+    // }
 
 }
