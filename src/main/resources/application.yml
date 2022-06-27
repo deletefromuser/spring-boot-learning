@@ -63,8 +63,9 @@ spring:
         "[value.deserializer]": org.springframework.kafka.support.serializer.JsonDeserializer
         # "[groud-id]": "test"
         # https://stackoverflow.com/a/61963869/19120213
-        # "[spring.json.trusted.packages]": "java.util, java.lang, com.example.springboot.model.Todo"
-        "[spring.json.trusted.packages]": "*"
+        "[spring.json.trusted.packages]": "com.example.springboot.model"
+        # "[spring.json.trusted.packages]": "*"
+        "[max.poll.records]": "1"
 
   messages:
     # default basename: messages
