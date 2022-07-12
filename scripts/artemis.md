@@ -52,7 +52,7 @@ https://kafka.apache.org/documentation/#quickstart
 cd /opt/kafka_2.13-3.2.0
 # Start the ZooKeeper service
 # Note: Soon, ZooKeeper will no longer be required by Apache Kafka.
-bin/zookeeper-server-start.sh config/zookeeper.propertie
+bin/zookeeper-server-start.sh config/zookeeper.properties
 # Start the Kafka broker service
 # Open another terminal session and run:
 bin/kafka-server-start.sh config/server.properties

@@ -37,7 +37,7 @@ public class HelloController {
 	// @Resource(name = "redisTemplate")
 	// HashOperations<String, byte[], byte[]> hashOperations;
 
-	@Autowired
+	// @Autowired
 	@Resource(name = "redisTemplate")
 	HashOperations<String, String, Object> hashOperationsJson;
 
