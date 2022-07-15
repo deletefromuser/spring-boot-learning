@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
@@ -18,9 +24,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
@@ -55,7 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableConfigurationProperties(PropertiesConfig.class)
 @PropertySource(value = "classpath:application-oauth2.yml", factory = YamlPropertySourceFactory.class)
 @Slf4j
-@EnableKafka
+// @EnableKafka
 public class MyConfig implements WebMvcConfigurer {
 
     /**
@@ -278,6 +281,8 @@ public class MyConfig implements WebMvcConfigurer {
         // };
     }
 
+    // JMS
+
     // Spring实战（第5版）8.1.2 使⽤JmsTemplate发送消息
     // @Bean
     // public MappingJackson2MessageConverter messageConverter() {
@@ -292,7 +297,6 @@ public class MyConfig implements WebMvcConfigurer {
     // return messageConverter;
     // }
 
-    // //
     // https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#messaging.jms.receiving
     // @Bean
     // public JmsListenerContainerFactory<DefaultMessageListenerContainer>
@@ -306,58 +310,50 @@ public class MyConfig implements WebMvcConfigurer {
     // return factory;
     // }
 
+    // JMS
+
+    // rabbitmq
+
     // https://spring.io/guides/gs/messaging-rabbitmq/
-    // static final String topicExchangeName = "example.boot.todos";
-    // static final String directExchangeName = "direct.todos";
+    static final String topicExchangeName = "example.boot.todos";
+    static final String directExchangeName = "direct.todos";
 
-    // static final String queueName = "spring-boot";
-    // static final String queueNameDirect = "spring-boot-direct";
+    static final String queueName = "spring-boot";
+    static final String queueNameDirect = "spring-boot-direct";
 
-    // @Bean
-    // Queue queue() {
-    // return new Queue(queueName, false);
-    // }
+    @Bean
+    Queue queue() {
+        return new Queue(queueName, false);
+    }
 
-    // @Bean
-    // Queue queueDirect() {
-    // return new Queue(queueNameDirect, false);
-    // }
+    @Bean
+    Queue queueDirect() {
+        return new Queue(queueNameDirect, false);
+    }
 
-    // @Bean
-    // // @Profile("dev")
-    // TopicExchange exchange() {
-    // return new TopicExchange(topicExchangeName);
-    // }
+    @Bean
+    // @Profile("dev")
+    TopicExchange exchange() {
+        return new TopicExchange(topicExchangeName);
+    }
 
-    // @Bean
-    // // @Profile("prod")
-    // DirectExchange exchangeDirect() {
-    // return new DirectExchange(directExchangeName);
-    // }
+    @Bean
+    // @Profile("prod")
+    DirectExchange exchangeDirect() {
+        return new DirectExchange(directExchangeName);
+    }
 
-    // @Bean
-    // Binding binding(Queue queue, TopicExchange exchange) {
-    // return BindingBuilder.bind(queue).to(exchange).with("handler.#");
-    // }
+    @Bean
+    Binding binding() {
+        return BindingBuilder.bind(queue()).to(exchange()).with("handler.#");
+    }
 
-    // // https://stackoverflow.com/a/41210909/19120213
-    // @Bean
-    // Binding bindingDirect(Queue queue, DirectExchange directExchange) {
-    // return
-    // BindingBuilder.bind(queueDirect()).to(directExchange).with("handler.todo");
-    // }
+    // https://stackoverflow.com/a/41210909/19120213
+    @Bean
+    Binding bindingDirect() {
+        return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo");
+    }
 
-    // @Bean
-    // public MessageConverter messageConverter() {
-    // return new Jackson2JsonMessageConverter();
-    // }
-
-    // @Bean
-    // public ConcurrentKafkaListenerContainerFactory myKafkaListenerContainerFactory(ConsumerFactory<?, ?> consumerFactory) {
-    //     ConcurrentKafkaListenerContainerFactory factory = new ConcurrentKafkaListenerContainerFactory();
-    //     factory.setConsumerFactory(consumerFactory);
-    //     factory.setConcurrency(4);
-    //     return factory;
-    // }
+    // rabbitmq
 
 }

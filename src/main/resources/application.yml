@@ -48,24 +48,24 @@ spring:
       exchange: example.boot.todos
       routing-key: handler.todo
 
-  kafka:
-  #  bootstrap-servers:
-  #    - kafka.tacocloud.com:909
-  #    - kafka.tacocloud.com:9093
-  #    - kafka.tacocloud.com:909
-    template:
-      default-topic: topic.todo
-    producer:
-      properties:
-        "[value.serializer]": org.springframework.kafka.support.serializer.JsonSerializer
-    consumer:
-      properties:
-        "[value.deserializer]": org.springframework.kafka.support.serializer.JsonDeserializer
-        # "[groud-id]": "test"
-        # https://stackoverflow.com/a/61963869/19120213
-        "[spring.json.trusted.packages]": "com.example.springboot.model"
-        # "[spring.json.trusted.packages]": "*"
-        "[max.poll.records]": "1"
+  # kafka:
+  # #  bootstrap-servers:
+  # #    - kafka.tacocloud.com:909
+  # #    - kafka.tacocloud.com:9093
+  # #    - kafka.tacocloud.com:909
+  #   template:
+  #     default-topic: topic.todo
+  #   producer:
+  #     properties:
+  #       "[value.serializer]": org.springframework.kafka.support.serializer.JsonSerializer
+  #   consumer:
+  #     properties:
+  #       "[value.deserializer]": org.springframework.kafka.support.serializer.JsonDeserializer
+  #       # "[groud-id]": "test"
+  #       # https://stackoverflow.com/a/61963869/19120213
+  #       "[spring.json.trusted.packages]": "com.example.springboot.model"
+  #       # "[spring.json.trusted.packages]": "*"
+  #       "[max.poll.records]": "1"
 
   messages:
     # default basename: messages
