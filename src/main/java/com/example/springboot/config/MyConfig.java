@@ -1,8 +1,10 @@
 package com.example.springboot.config;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
@@ -327,8 +331,23 @@ public class MyConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    Queue queueSpecific() {
+        return new Queue("spring-boot-specific", false);
+    }
+
+    @Bean
     Queue queueDirect() {
         return new Queue(queueNameDirect, false);
+    }
+
+    @Bean
+    Queue queueFanout1() {
+        return new Queue("fanout.1", false);
+    }
+
+    @Bean
+    Queue queueFanout2() {
+        return new Queue("fanout.2", false);
     }
 
     @Bean
@@ -344,14 +363,46 @@ public class MyConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    FanoutExchange exchangeFanout() {
+        return new FanoutExchange("fanout");
+    }
+
+    @Bean
     Binding binding() {
         return BindingBuilder.bind(queue()).to(exchange()).with("handler.#");
+    }
+
+    @Bean
+    Binding bindingSpecific() {
+        return BindingBuilder.bind(queueSpecific()).to(exchange()).with("handler.todo");
     }
 
     // https://stackoverflow.com/a/41210909/19120213
     @Bean
     Binding bindingDirect() {
         return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo");
+    }
+
+    // @Bean
+    // Binding bindingFanout1() {
+    // return BindingBuilder.bind(queueFanout1()).to(exchangeFanout());
+    // }
+
+    // @Bean
+    // Binding bindingFanout2() {
+    // return BindingBuilder.bind(queueFanout2()).to(exchangeFanout());
+    // }
+
+    // @Bean
+    // Binding bindingFanout3() {
+    // return BindingBuilder.bind(queue()).to(exchangeFanout());
+    // }
+
+    @Bean
+    public Declarables bindings() {
+        return new Declarables(Arrays.asList(queueFanout1(), queueFanout2(), queue()).stream()
+                .map(key -> BindingBuilder.bind(key).to(exchangeFanout()))
+                .collect(Collectors.toList()));
     }
 
     // rabbitmq

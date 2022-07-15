@@ -87,4 +87,11 @@ public class RabbitMQTest {
         rabbit.convertAndSend(todo);
     }
 
+    @Test
+    public void testSendTodoForListenerFanout() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("fanout", "", todo);
+    }
+
 }
