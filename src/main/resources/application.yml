@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8965
   servlet:
-    context-path: /nyaa-rss-proxy
+    context-path: /
 

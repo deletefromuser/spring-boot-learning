@@ -31,7 +31,7 @@ public class ProxyController {
                                         new InetSocketAddress("localhost", 1080)))
                         .build();
 
-        @GetMapping(value = "/nyaa/", produces = "application/xml")
+        @GetMapping(value = "/", produces = "application/xml")
         @ResponseBody
         String proxyNyaaRss(HttpServletRequest req) throws IOException {
                 log.info("req.toString() -" + req.toString());
@@ -51,13 +51,13 @@ public class ProxyController {
                         return response.body().string().replace("https://nyaa.si/download/",
                                         req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort()
                                                         + req.getContextPath()
-                                                        + "/nyaa/download/");
+                                                        + "/download/");
                 }
         }
 
         // https://stackoverflow.com/a/35683261/19120213
         @SneakyThrows
-        @GetMapping(value = "/nyaa/download/{torrent}", produces = "application/x-bittorrent")
+        @GetMapping(value = "/download/{torrent}", produces = "application/x-bittorrent")
         @ResponseBody
         ResponseEntity<Resource> proxyNyaaRssDownload(HttpServletRequest req, @PathVariable String torrent) {
                 String url = "https://nyaa.si/download/" + torrent;
