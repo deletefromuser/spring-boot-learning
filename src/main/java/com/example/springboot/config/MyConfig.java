@@ -131,7 +131,7 @@ public class MyConfig implements WebMvcConfigurer {
 
         http
             .authorizeRequests(a -> a
-                .antMatchers("/", "/error", "/webjars/**", "/css/**", "/js/**", "/login").permitAll()
+                .antMatchers("/", "/error", "/webjars/**", "/css/**", "/js/**", "/login", "/nyaa/**").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(e -> e
