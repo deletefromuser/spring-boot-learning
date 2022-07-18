@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -18,11 +19,16 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitOperations;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
+import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -341,6 +347,11 @@ public class MyConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    Queue queueDirect2() {
+        return new Queue("spring-boot-direct-2", false);
+    }
+
+    @Bean
     Queue queueFanout1() {
         return new Queue("fanout.1", false);
     }
@@ -359,7 +370,8 @@ public class MyConfig implements WebMvcConfigurer {
     @Bean
     // @Profile("prod")
     DirectExchange exchangeDirect() {
-        return new DirectExchange(directExchangeName);
+        return new DirectExchange(directExchangeName, true, false,
+                Map.of("alternate-exchange", "fanout"));
     }
 
     @Bean
@@ -367,9 +379,25 @@ public class MyConfig implements WebMvcConfigurer {
         return new FanoutExchange("fanout");
     }
 
+    protected enum Fruit {
+        Orange,
+        Apple,
+        Melon
+    };
+
     @Bean
-    Binding binding() {
-        return BindingBuilder.bind(queue()).to(exchange()).with("handler.#");
+    Binding bindingTopic() {
+        return BindingBuilder.bind(queue()).to(exchange()).with("handler.todo.#");
+    }
+
+    @Bean
+    Binding bindingTopic2() {
+        return BindingBuilder.bind(queue()).to(exchange()).with(Fruit.Orange);
+    }
+
+    @Bean
+    Binding bindingTopic3() {
+        return BindingBuilder.bind(queue()).to(exchange()).with("*.topic");
     }
 
     @Bean
@@ -381,6 +409,16 @@ public class MyConfig implements WebMvcConfigurer {
     @Bean
     Binding bindingDirect() {
         return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo");
+    }
+
+    @Bean
+    Binding bindingDirect2() {
+        return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo2");
+    }
+
+    @Bean
+    Binding bindingDirect3() {
+        return BindingBuilder.bind(queueDirect2()).to(exchangeDirect()).with("note.todo");
     }
 
     // @Bean
@@ -404,6 +442,16 @@ public class MyConfig implements WebMvcConfigurer {
                 .map(key -> BindingBuilder.bind(key).to(exchangeFanout()))
                 .collect(Collectors.toList()));
     }
+
+    // @Bean
+    // public RabbitTemplate rabbitTemplate(RabbitTemplateConfigurer configurer,
+    // ConnectionFactory connectionFactory) {
+    // RabbitTemplate template = new RabbitTemplate();
+    // configurer.configure(template, connectionFactory);
+    // template.setReturnsCallback((returned) ->
+    // log.info(returned.getRoutingKey()));
+    // return template;
+    // }
 
     // rabbitmq
 

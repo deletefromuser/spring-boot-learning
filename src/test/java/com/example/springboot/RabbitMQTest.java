@@ -6,6 +6,7 @@ import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -88,10 +89,44 @@ public class RabbitMQTest {
     }
 
     @Test
+    public void testSendTopicTodoForListener() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("Orange", todo);
+    }
+
+    @Test
+    public void testSendTopic3TodoForListener() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("todo.topic", todo);
+    }
+
+    @Test
     public void testSendTodoForListenerFanout() {
         EasyRandom easyRandom = new EasyRandom();
         Todo todo = easyRandom.nextObject(Todo.class);
         rabbit.convertAndSend("fanout", "", todo);
+    }
+
+    @Test
+    public void testSendTodoForListenerDirect() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("direct.todos", "handler.todo2", todo);
+    }
+    @Test
+    public void testSendTodoForListenerAlternate() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("direct.todos", "todo3", todo);
+    }
+
+    @Test
+    public void testSendTodoForCallback() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("direct.todos", "handler.todo2", todo);
     }
 
 }
