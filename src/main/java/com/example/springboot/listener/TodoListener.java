@@ -16,9 +16,14 @@ public class TodoListener {
         log.info("queues=spring-boot:" + todo.toString());
     }
 
-    @RabbitListener(queues = { "spring-boot-direct", "spring-boot-direct-2" })
+    @RabbitListener(queues = { "spring-boot-direct" })
     public void receiveDirect(Todo todo) {
-        log.info("queues=spring-boot-direct,spring-boot-direct-2:" + todo.toString());
+        log.info("queues=spring-boot-direct:" + todo.toString());
+    }
+
+    // @RabbitListener(queues = { "spring-boot-direct-2" })
+    public void receiveDirect2(Todo todo) {
+        log.info("queues=spring-boot-direct-2:" + todo.toString());
     }
 
     @RabbitListener(queues = "spring-boot-specific")

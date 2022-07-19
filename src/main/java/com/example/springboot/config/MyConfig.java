@@ -348,7 +348,8 @@ public class MyConfig implements WebMvcConfigurer {
 
     @Bean
     Queue queueDirect2() {
-        return new Queue("spring-boot-direct-2", false);
+        return new Queue("spring-boot-direct-2", false, false, false,
+                Map.of("x-message-ttl", 10, "x-dead-letter-exchange", "fanout"));
     }
 
     @Bean

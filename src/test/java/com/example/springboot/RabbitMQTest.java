@@ -2,18 +2,19 @@ package com.example.springboot;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.concurrent.TimeUnit;
+
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
-import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.springboot.model.Todo;
-import com.google.api.client.util.StringUtils;
+import com.google.common.util.concurrent.Uninterruptibles;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -115,6 +116,7 @@ public class RabbitMQTest {
         Todo todo = easyRandom.nextObject(Todo.class);
         rabbit.convertAndSend("direct.todos", "handler.todo2", todo);
     }
+
     @Test
     public void testSendTodoForListenerAlternate() {
         EasyRandom easyRandom = new EasyRandom();
@@ -127,6 +129,28 @@ public class RabbitMQTest {
         EasyRandom easyRandom = new EasyRandom();
         Todo todo = easyRandom.nextObject(Todo.class);
         rabbit.convertAndSend("direct.todos", "handler.todo2", todo);
+    }
+
+    /**
+     * with @RabbitListener(queues = { "spring-boot-direct-2"})
+     */
+    @Test
+    public void testSendTodoForListenerDlx() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("direct.todos", "note.todo", todo);
+    }
+
+    /**
+     * without @RabbitListener(queues = { "spring-boot-direct-2"})
+     */
+    @Test
+    public void testSendTodoForListenerDlx2() {
+        EasyRandom easyRandom = new EasyRandom();
+        Todo todo = easyRandom.nextObject(Todo.class);
+        rabbit.convertAndSend("direct.todos", "note.todo", todo);
+
+        Uninterruptibles.sleepUninterruptibly(15, TimeUnit.SECONDS);
     }
 
 }
