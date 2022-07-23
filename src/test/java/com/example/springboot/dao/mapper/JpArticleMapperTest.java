@@ -43,9 +43,9 @@ public class JpArticleMapperTest {
         try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);) {
             JpArticleMapper mapper = sqlSession.getMapper(JpArticleMapper.class);
 
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 20; i++) {
 
-                for (int j = 0; j < 500; j++) {
+                for (int j = 0; j < 50; j++) {
                     JpArticle article = easyRandom.nextObject(JpArticle.class);
                     article.setId(null);
 
