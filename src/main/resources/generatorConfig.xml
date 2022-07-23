@@ -39,6 +39,9 @@
 			<property name="ignoreQualifiersAtRuntime" value="true" />
 			<columnOverride column="enabled" javaType="java.lang.Boolean" />
 		</table>
+		<table tableName="jp_article" catalog="ut2" domainObjectName="JpArticle">
+			<property name="ignoreQualifiersAtRuntime" value="true" />
+		</table>
 
 	</context>
 </generatorConfiguration>
