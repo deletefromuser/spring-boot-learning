@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -58,9 +59,11 @@ public class JpArticleMapperTest {
                     article.setContent(IntStream.range(1, 10)
                             .mapToObj(index -> wordlistCh.get(RandomUtils.nextInt(0, wordlistCh.size())))
                             .collect(Collectors.joining()));
-                    article.setUrl(StringUtils.join(IntStream.range(1, 5)
-                            .mapToObj(index -> wordlistCh.get(RandomUtils.nextInt(0, wordlistCh.size())))
-                            .collect(Collectors.toList()), ' '));
+                    article.setUrl(StringUtils.join(
+                            Stream.generate(() -> wordlistCh.get(RandomUtils.nextInt(0, wordlistCh.size())))
+                                    .limit(10)
+                                    .collect(Collectors.toList()),
+                            ' '));
                     mapper.insert(article);
                 }
                 sqlSession.commit();

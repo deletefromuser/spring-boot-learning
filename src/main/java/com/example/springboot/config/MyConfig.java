@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -19,22 +20,18 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitOperations;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.audit.InMemoryAuditEventRepository;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
-import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -69,6 +66,7 @@ import lombok.extern.slf4j.Slf4j;
 @PropertySource(value = "classpath:application-oauth2.yml", factory = YamlPropertySourceFactory.class)
 @Slf4j
 // @EnableKafka
+@EnableAsync
 public class MyConfig implements WebMvcConfigurer {
 
     /**
@@ -456,4 +454,21 @@ public class MyConfig implements WebMvcConfigurer {
 
     // rabbitmq
 
+    // 声明一个线程池(并指定线程池的名字)
+    @Bean("taskExecutor")
+    public Executor asyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        // 核心线程数5：线程池创建时候初始化的线程数
+        executor.setCorePoolSize(5);
+        // 最大线程数5：线程池最大的线程数，只有在缓冲队列满了之后才会申请超过核心线程数的线程
+        executor.setMaxPoolSize(5);
+        // 缓冲队列500：用来缓冲执行任务的队列
+        executor.setQueueCapacity(500);
+        // 允许线程的空闲时间60秒：当超过了核心线程出之外的线程在空闲时间到达之后会被销毁
+        executor.setKeepAliveSeconds(60);
+        // 线程池名的前缀：设置好了之后可以方便我们定位处理任务所在的线程池
+        executor.setThreadNamePrefix("DailyAsync-");
+        executor.initialize();
+        return executor;
+    }
 }
