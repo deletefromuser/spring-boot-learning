@@ -105,6 +105,6 @@ order by relevance desc;
 
 select VERSION();
 
-
+SHOW VARIABLES LIKE 'transaction_isolation';
 
 

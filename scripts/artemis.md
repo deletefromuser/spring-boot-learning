@@ -63,5 +63,7 @@ bin/kafka-server-start.sh config/server.properties
 ### start mysql in docker
 
 ```
-docker run --detach --name=test-mysql -p 52000:3306  --env="MYSQL_ROOT_PASSWORD=mypassword" mysql
+docker run --detach --name=test-mysql -p 52000:3306 -p 52001:33060 --env="MYSQL_ROOT_PASSWORD=mypassword" mysql
+
+
 ```

@@ -36,9 +36,20 @@ WHERE table_schema = 'ut2'
 -- https://jira.mariadb.org/browse/MDEV-10267
 CREATE FULLTEXT INDEX FULLTEXT_content ON jp_article(content) WITH PARSER ngram;
 SHOW CREATE TABLE `ut2`.`jp_article`;
+SHOW CREATE TABLE authorities;
 
 CREATE FULLTEXT INDEX FULLTEXT_url ON jp_article(url);
 
 select count(1)
 from jp_article
 where match (url) AGAINST ('呀');
+
+show create DATABASE ut2;
+
+select VERSION();
+SHOW PROCESSLIST ;
+
+create database  if not exists ut3 character set utf8mb4 ;
+
+
+desc users;
