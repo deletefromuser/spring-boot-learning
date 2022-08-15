@@ -136,4 +136,12 @@
       oauth_id = #{oauthId,jdbcType=VARCHAR}
     where username = #{username,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectUsers" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <bind name="pattern" value="'%' + #{username,jdbcType=VARCHAR} + '%'" />
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where username like #{username,jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -97,4 +97,10 @@ public class UsersMapperTest {
 
         }
     }
+
+    @Test
+    @Transactional
+    void testSelectUsers() {
+        mapper.selectUsers("");
+    }
 }
