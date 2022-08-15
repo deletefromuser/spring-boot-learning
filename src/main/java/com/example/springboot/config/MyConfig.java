@@ -135,7 +135,7 @@ public class MyConfig implements WebMvcConfigurer {
 
         http
             .authorizeRequests(a -> a
-                .antMatchers("/", "/error", "/webjars/**", "/css/**", "/js/**", "/login", "/nyaa/**").permitAll()
+                .antMatchers("/", "/error", "/webjars/**", "/css/**", "/js/**", "/login", "/nyaa/**", "/redis/**").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(e -> e
@@ -329,96 +329,96 @@ public class MyConfig implements WebMvcConfigurer {
     static final String queueName = "spring-boot";
     static final String queueNameDirect = "spring-boot-direct";
 
-    @Bean
-    Queue queue() {
-        return new Queue(queueName, false);
-    }
+    // @Bean
+    // Queue queue() {
+    //     return new Queue(queueName, false);
+    // }
 
-    @Bean
-    Queue queueSpecific() {
-        return new Queue("spring-boot-specific", false);
-    }
+    // @Bean
+    // Queue queueSpecific() {
+    //     return new Queue("spring-boot-specific", false);
+    // }
 
-    @Bean
-    Queue queueDirect() {
-        return new Queue(queueNameDirect, false);
-    }
+    // @Bean
+    // Queue queueDirect() {
+    //     return new Queue(queueNameDirect, false);
+    // }
 
-    @Bean
-    Queue queueDirect2() {
-        return new Queue("spring-boot-direct-2", false, false, false,
-                Map.of("x-message-ttl", 10, "x-dead-letter-exchange", "fanout"));
-    }
+    // @Bean
+    // Queue queueDirect2() {
+    //     return new Queue("spring-boot-direct-2", false, false, false,
+    //             Map.of("x-message-ttl", 10, "x-dead-letter-exchange", "fanout"));
+    // }
 
-    @Bean
-    Queue queueFanout1() {
-        return new Queue("fanout.1", false);
-    }
+    // @Bean
+    // Queue queueFanout1() {
+    //     return new Queue("fanout.1", false);
+    // }
 
-    @Bean
-    Queue queueFanout2() {
-        return new Queue("fanout.2", false);
-    }
+    // @Bean
+    // Queue queueFanout2() {
+    //     return new Queue("fanout.2", false);
+    // }
 
-    @Bean
-    // @Profile("dev")
-    TopicExchange exchange() {
-        return new TopicExchange(topicExchangeName);
-    }
+    // @Bean
+    // // @Profile("dev")
+    // TopicExchange exchange() {
+    //     return new TopicExchange(topicExchangeName);
+    // }
 
-    @Bean
-    // @Profile("prod")
-    DirectExchange exchangeDirect() {
-        return new DirectExchange(directExchangeName, true, false,
-                Map.of("alternate-exchange", "fanout"));
-    }
+    // @Bean
+    // // @Profile("prod")
+    // DirectExchange exchangeDirect() {
+    //     return new DirectExchange(directExchangeName, true, false,
+    //             Map.of("alternate-exchange", "fanout"));
+    // }
 
-    @Bean
-    FanoutExchange exchangeFanout() {
-        return new FanoutExchange("fanout");
-    }
+    // @Bean
+    // FanoutExchange exchangeFanout() {
+    //     return new FanoutExchange("fanout");
+    // }
 
-    protected enum Fruit {
-        Orange,
-        Apple,
-        Melon
-    };
+    // protected enum Fruit {
+    //     Orange,
+    //     Apple,
+    //     Melon
+    // };
 
-    @Bean
-    Binding bindingTopic() {
-        return BindingBuilder.bind(queue()).to(exchange()).with("handler.todo.#");
-    }
+    // @Bean
+    // Binding bindingTopic() {
+    //     return BindingBuilder.bind(queue()).to(exchange()).with("handler.todo.#");
+    // }
 
-    @Bean
-    Binding bindingTopic2() {
-        return BindingBuilder.bind(queue()).to(exchange()).with(Fruit.Orange);
-    }
+    // @Bean
+    // Binding bindingTopic2() {
+    //     return BindingBuilder.bind(queue()).to(exchange()).with(Fruit.Orange);
+    // }
 
-    @Bean
-    Binding bindingTopic3() {
-        return BindingBuilder.bind(queue()).to(exchange()).with("*.topic");
-    }
+    // @Bean
+    // Binding bindingTopic3() {
+    //     return BindingBuilder.bind(queue()).to(exchange()).with("*.topic");
+    // }
 
-    @Bean
-    Binding bindingSpecific() {
-        return BindingBuilder.bind(queueSpecific()).to(exchange()).with("handler.todo");
-    }
+    // @Bean
+    // Binding bindingSpecific() {
+    //     return BindingBuilder.bind(queueSpecific()).to(exchange()).with("handler.todo");
+    // }
 
-    // https://stackoverflow.com/a/41210909/19120213
-    @Bean
-    Binding bindingDirect() {
-        return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo");
-    }
+    // // https://stackoverflow.com/a/41210909/19120213
+    // @Bean
+    // Binding bindingDirect() {
+    //     return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo");
+    // }
 
-    @Bean
-    Binding bindingDirect2() {
-        return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo2");
-    }
+    // @Bean
+    // Binding bindingDirect2() {
+    //     return BindingBuilder.bind(queueDirect()).to(exchangeDirect()).with("handler.todo2");
+    // }
 
-    @Bean
-    Binding bindingDirect3() {
-        return BindingBuilder.bind(queueDirect2()).to(exchangeDirect()).with("note.todo");
-    }
+    // @Bean
+    // Binding bindingDirect3() {
+    //     return BindingBuilder.bind(queueDirect2()).to(exchangeDirect()).with("note.todo");
+    // }
 
     // @Bean
     // Binding bindingFanout1() {
@@ -435,12 +435,12 @@ public class MyConfig implements WebMvcConfigurer {
     // return BindingBuilder.bind(queue()).to(exchangeFanout());
     // }
 
-    @Bean
-    public Declarables bindings() {
-        return new Declarables(Arrays.asList(queueFanout1(), queueFanout2(), queue()).stream()
-                .map(key -> BindingBuilder.bind(key).to(exchangeFanout()))
-                .collect(Collectors.toList()));
-    }
+    // @Bean
+    // public Declarables bindings() {
+    //     return new Declarables(Arrays.asList(queueFanout1(), queueFanout2(), queue()).stream()
+    //             .map(key -> BindingBuilder.bind(key).to(exchangeFanout()))
+    //             .collect(Collectors.toList()));
+    // }
 
     // @Bean
     // public RabbitTemplate rabbitTemplate(RabbitTemplateConfigurer configurer,

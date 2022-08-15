@@ -1,7 +1,9 @@
 spring:
   redis:
-    cluster:
-      nodes: 127.0.0.1:6481,127.0.0.1:6482,127.0.0.1:6483,127.0.0.1:6484,127.0.0.1:6485,127.0.0.1:6486
+    database: 0
+    host: localhost
+    port: 6379
+    password: a12345678
   
   datasource:
     url: jdbc:mariadb://localhost:3306/ut2
@@ -39,14 +41,14 @@ spring:
   #   template:
   #     default-destination: tacocloud.order.queue
 
-  rabbitmq:
-    # host: "localhost"
-    # port: 5672
-    # username: "admin"
-    # password: "secret"
-    template:
-      exchange: example.boot.todos
-      routing-key: handler.todo
+  # rabbitmq:
+  #   # host: "localhost"
+  #   # port: 5672
+  #   # username: "admin"
+  #   # password: "secret"
+  #   template:
+  #     exchange: example.boot.todos
+  #     routing-key: handler.todo
 
   # kafka:
   # #  bootstrap-servers:
@@ -75,7 +77,7 @@ spring:
     active: @activatedProperties@
 
 server:
-  port: 8080
+  port: 8086
   servlet:
     context-path: /boot
 

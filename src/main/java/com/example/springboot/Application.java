@@ -24,6 +24,8 @@ public class Application implements ApplicationRunner, CommandLineRunner {
 	@Override
 	public void run(ApplicationArguments arg0) throws Exception {
 		log.info("Hello World from Application Runner");
+		log.info("测试中文");
+		log.info("日本語文字化け");
 	}
 
 	@Override
