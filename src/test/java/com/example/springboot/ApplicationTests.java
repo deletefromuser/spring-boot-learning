@@ -2,7 +2,6 @@ package com.example.springboot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.hash.Jackson2HashMapper;
 
 import com.google.gson.Gson;
 
@@ -17,8 +16,8 @@ class ApplicationTests {
 		paProduct.setInfo(new ProductInfo());
 		paProduct.getInfo().setDetails("hooho");
 
-		System.out.println(new Gson().toJson(new Jackson2HashMapper(true).toHash(paProduct)));
-		System.out.println(new Gson().toJson(new Jackson2HashMapper(false).toHash(paProduct)));
+		// System.out.println(new Gson().toJson(new Jackson2HashMapper(true).toHash(paProduct)));
+		// System.out.println(new Gson().toJson(new Jackson2HashMapper(false).toHash(paProduct)));
 	}
 
 }
