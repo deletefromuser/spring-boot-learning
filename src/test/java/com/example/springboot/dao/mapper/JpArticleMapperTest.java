@@ -22,53 +22,69 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.example.springboot.dao.model.JpArticle;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
+@Slf4j
 public class JpArticleMapperTest {
 
-    @Autowired
-    JpArticleMapper mapper;
+        @Autowired
+        JpArticleMapper mapper;
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+        @Autowired
+        JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    SqlSessionFactory sqlSessionFactory;
+        @Autowired
+        SqlSessionFactory sqlSessionFactory;
 
-    @Test
-    void testBatchInsert() throws IOException {
-        final List<String> wordlist = Files.readAllLines(new ClassPathResource("wordlist.txt").getFile().toPath());
-        final List<String> wordlistCh = Files
-                .readAllLines(new ClassPathResource("chinese-word-list.txt").getFile().toPath());
-        EasyRandom easyRandom = new EasyRandom();
-
-        try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);) {
-            JpArticleMapper mapper = sqlSession.getMapper(JpArticleMapper.class);
-
-            for (int i = 0; i < 20; i++) {
-
-                for (int j = 0; j < 50; j++) {
-                    JpArticle article = easyRandom.nextObject(JpArticle.class);
-                    article.setId(null);
-
-                    article.setTitleRuby(StringUtils.join(IntStream.range(1, 5)
-                            .mapToObj(index -> RandomStringUtils.randomAlphabetic(3, 10))
-                            .collect(Collectors.toList()), ' '));
-                    article.setTitle(StringUtils.join(IntStream.range(1, 5)
-                            .mapToObj(index -> wordlist.get(RandomUtils.nextInt(0, wordlist.size())))
-                            .collect(Collectors.toList()), ' '));
-                    article.setContent(IntStream.range(1, 10)
-                            .mapToObj(index -> wordlistCh.get(RandomUtils.nextInt(0, wordlistCh.size())))
-                            .collect(Collectors.joining()));
-                    article.setUrl(StringUtils.join(
-                            Stream.generate(() -> wordlistCh.get(RandomUtils.nextInt(0, wordlistCh.size())))
-                                    .limit(10)
-                                    .collect(Collectors.toList()),
-                            ' '));
-                    mapper.insert(article);
-                }
-                sqlSession.commit();
-            }
-
+        @Test
+        void testSelect() throws IOException {
+                JpArticle article = new JpArticle();
+                article.setId(4L);
+                article.setTitle("null3333333");
+                mapper.insert(article);
+                log.info(mapper.selectByPrimaryKey(4L).toString());
         }
-    }
+
+        @Test
+        void testBatchInsert() throws IOException {
+                final List<String> wordlist = Files
+                                .readAllLines(new ClassPathResource("wordlist.txt").getFile().toPath());
+                final List<String> wordlistCh = Files
+                                .readAllLines(new ClassPathResource("chinese-word-list.txt").getFile().toPath());
+                EasyRandom easyRandom = new EasyRandom();
+
+                try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);) {
+                        JpArticleMapper mapper = sqlSession.getMapper(JpArticleMapper.class);
+
+                        for (int i = 0; i < 20; i++) {
+
+                                for (int j = 0; j < 50; j++) {
+                                        JpArticle article = easyRandom.nextObject(JpArticle.class);
+                                        article.setId(null);
+
+                                        article.setTitleRuby(StringUtils.join(IntStream.range(1, 5)
+                                                        .mapToObj(index -> RandomStringUtils.randomAlphabetic(3, 10))
+                                                        .collect(Collectors.toList()), ' '));
+                                        article.setTitle(StringUtils.join(IntStream.range(1, 5)
+                                                        .mapToObj(index -> wordlist
+                                                                        .get(RandomUtils.nextInt(0, wordlist.size())))
+                                                        .collect(Collectors.toList()), ' '));
+                                        article.setContent(IntStream.range(1, 10)
+                                                        .mapToObj(index -> wordlistCh
+                                                                        .get(RandomUtils.nextInt(0, wordlistCh.size())))
+                                                        .collect(Collectors.joining()));
+                                        article.setUrl(StringUtils.join(
+                                                        Stream.generate(() -> wordlistCh
+                                                                        .get(RandomUtils.nextInt(0, wordlistCh.size())))
+                                                                        .limit(10)
+                                                                        .collect(Collectors.toList()),
+                                                        ' '));
+                                        mapper.insert(article);
+                                }
+                                sqlSession.commit();
+                        }
+
+                }
+        }
 }

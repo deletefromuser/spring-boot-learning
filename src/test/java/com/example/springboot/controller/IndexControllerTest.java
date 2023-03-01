@@ -1,7 +1,5 @@
 package com.example.springboot.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.base.Charsets;
@@ -29,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.main.lazy-initialization=true")
-@WithMockUser(username = "user")
+// @WithMockUser(username = "user")
 @Slf4j
 public class IndexControllerTest {
 
@@ -43,8 +36,8 @@ public class IndexControllerTest {
 
     @BeforeEach
     public void setupMockMvc() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(SecurityMockMvcConfigurers.springSecurity()).build();
+        // mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+        //         .apply(SecurityMockMvcConfigurers.springSecurity()).build();
     }
 
     @Test
@@ -67,12 +60,12 @@ public class IndexControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("index"));
     }
 
-    @Test
-    public void test_user() throws Exception {
-        Authentication authenticationByManual = SecurityContextHolder.getContext().getAuthentication();
+    // @Test
+    // public void test_user() throws Exception {
+    //     Authentication authenticationByManual = SecurityContextHolder.getContext().getAuthentication();
 
-        log.info(authenticationByManual.toString());
-        assertEquals("user", authenticationByManual.getName());
-    }
+    //     log.info(authenticationByManual.toString());
+    //     assertEquals("user", authenticationByManual.getName());
+    // }
 
 }

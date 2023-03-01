@@ -1,19 +1,19 @@
 spring:
-  redis:
-    # cluster:
-    #   nodes: 127.0.0.1:6481,127.0.0.1:6482,127.0.0.1:6483,127.0.0.1:6484,127.0.0.1:6485,127.0.0.1:6486
-    database: 0
-    host: localhost
-    port: 6379
-    password: a12345678
+  # redis:
+  #   # cluster:
+  #   #   nodes: 127.0.0.1:6481,127.0.0.1:6482,127.0.0.1:6483,127.0.0.1:6484,127.0.0.1:6485,127.0.0.1:6486
+  #   database: 0
+  #   host: localhost
+  #   port: 6379
+  #   password: a12345678
   
-  datasource:
-    url: jdbc:mariadb://localhost:3306/ut2
-    driverClassName: org.mariadb.jdbc.Driver
-    username: user
-    password: '123'
-    tomcat:
-      init-s-q-l: SET NAMES 'utf8mb4'
+  # datasource:
+  #   url: jdbc:mariadb://localhost:3306/ut2
+  #   driverClassName: org.mariadb.jdbc.Driver
+  #   username: user
+  #   password: '123'
+  #   tomcat:
+  #     init-s-q-l: SET NAMES 'utf8mb4'
 
   # https://stackoverflow.com/a/58299451/19120213
   # autoconfigure:
@@ -21,17 +21,17 @@ spring:
   #     - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   #     - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
  
-  security:
-    user:
-      name: user
-      password: '123'
-    oauth2:
-      client:
-        provider:
-          github:
-            # let authentication.getName() return github username(attributes.login) rather than id
-            # https://docs.spring.io/spring-security/reference/servlet/oauth2/login/advanced.html
-            userNameAttribute: login
+  # security:
+  #   user:
+  #     name: user
+  #     password: '123'
+  #   oauth2:
+  #     client:
+  #       provider:
+  #         github:
+  #           # let authentication.getName() return github username(attributes.login) rather than id
+  #           # https://docs.spring.io/spring-security/reference/servlet/oauth2/login/advanced.html
+  #           userNameAttribute: login
 
   # artemis:
   #   mode: native
@@ -79,52 +79,52 @@ spring:
     active: @activatedProperties@
 
 server:
-  port: 8086
+  port: 8080
   servlet:
     context-path: /boot
 
-management:
-  endpoints:
-    enabled-by-default: false
-    web:
-      exposure:
-        include: info, health, httptrace, configprops, beans, auditevents
+# management:
+#   endpoints:
+#     enabled-by-default: false
+#     web:
+#       exposure:
+#         include: info, health, httptrace, configprops, beans, auditevents
 
-  endpoint:
-    info:
-      enabled: true
-    health:
-      enabled: true
-      # https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/html/production-ready-endpoints.html#production-ready-health
-      show-details: when-authorized
-    configprops:
-      enabled: true
-    beans:
-      enabled: true
-    httptrace:
-      enabled: true
-    auditevents:
-      enabled: true
-  # https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2.0-M3-Release-Notes#actuator-http-trace-and-auditing-are-disabled-by-default
-  trace:
-    http:
-      enabled: true
+#   endpoint:
+#     info:
+#       enabled: true
+#     health:
+#       enabled: true
+#       # https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/html/production-ready-endpoints.html#production-ready-health
+#       show-details: when-authorized
+#     configprops:
+#       enabled: true
+#     beans:
+#       enabled: true
+#     httptrace:
+#       enabled: true
+#     auditevents:
+#       enabled: true
+#   # https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2.0-M3-Release-Notes#actuator-http-trace-and-auditing-are-disabled-by-default
+#   trace:
+#     http:
+#       enabled: true
 
-  # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.endpoints.info.auto-configured-info-contributors
-  info:
-    env:
-      enabled: true
-    java:
-      enabled: true
-    os:
-      enabled: true
+#   # https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.endpoints.info.auto-configured-info-contributors
+#   info:
+#     env:
+#       enabled: true
+#     java:
+#       enabled: true
+#     os:
+#       enabled: true
 
-info:
-  app:
-    encoding: UTF-8
-    java:
-      source: '11'
-      target: '@java.version@'
+# info:
+#   app:
+#     encoding: UTF-8
+#     java:
+#       source: '11'
+#       target: '@java.version@'
 
 product:
   name: hello\nworld
@@ -188,6 +188,3 @@ server:
   servlet:
     context-path: /boot-prod
 
-asako:
-  id: 3
-  name: asako

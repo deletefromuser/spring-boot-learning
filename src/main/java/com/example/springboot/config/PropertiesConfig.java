@@ -9,9 +9,9 @@ import lombok.Data;
 // https://tuhrig.de/using-configurationproperties-to-separate-service-and-configuration/
 
 @ConfigurationProperties(prefix = "product")
-// @Component
+@Component
 // https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/using-boot-auto-configuration.html#using-boot-auto-configuration
-// @EnableConfigurationProperties
+@EnableConfigurationProperties
 @Data
 public class PropertiesConfig {
 

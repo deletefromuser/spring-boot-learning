@@ -2,6 +2,9 @@ package com.example.springboot.dao.model;
 
 import java.time.LocalDateTime;
 
+import lombok.ToString;
+
+@ToString
 public class JpArticle {
     private Long id;
 
@@ -120,22 +123,4 @@ public class JpArticle {
         this.content = content == null ? null : content.trim();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", url=").append(url);
-        sb.append(", articleUrl=").append(articleUrl);
-        sb.append(", title=").append(title);
-        sb.append(", titleRuby=").append(titleRuby);
-        sb.append(", publishDate=").append(publishDate);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", modifyTime=").append(modifyTime);
-        sb.append(", content=").append(content);
-        sb.append("]");
-        return sb.toString();
-    }
 }
